@@ -1,24 +1,18 @@
-import 'package:elegionhack/auth/auth_provider.dart';
+import 'package:elegionhack/pages/authorized_widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthorizedPage extends StatelessWidget {
-  const AuthorizedPage({Key? key}) : super(key: key);
+  const AuthorizedPage({Key? key, required this.child}) : super(key: key);
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
-      body: Consumer(builder: (context, ref, child) {
-        return MaterialButton(
-          onPressed: () =>
-              ref.read(authStateNotifierProvider.notifier).logout(),
-          child: const Text('logout'),
-        );
-      }),
-    ));
+    return SafeArea(child: Scaffold(drawer: MainDrawer(), body: child));
   }
 
-  static Route route() {
-    return MaterialPageRoute(builder: (context) => const AuthorizedPage());
+  static Route route({required Widget child}) {
+    return MaterialPageRoute(
+        builder: (context) => AuthorizedPage(child: child));
   }
 }

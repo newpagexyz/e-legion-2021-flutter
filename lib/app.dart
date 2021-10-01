@@ -1,4 +1,5 @@
 import 'package:elegionhack/auth/auth_provider.dart';
+import 'package:elegionhack/pages/authorized_widgets/profile_page.dart';
 import 'package:elegionhack/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,8 +11,9 @@ final topNavigatorListener = Provider((ref) {
   ref.listen<AuthState>(authStateNotifierProvider, (value) {
     switch (value.status) {
       case AuthStatus.auth:
-        _navigator.currentState!
-            .pushAndRemoveUntil(AuthorizedPage.route(), (route) => false);
+        _navigator.currentState!.pushAndRemoveUntil(
+            AuthorizedPage.route(child: const ProfilePage.myProfile()),
+            (route) => false);
         break;
       case AuthStatus.unauth:
         _navigator.currentState!

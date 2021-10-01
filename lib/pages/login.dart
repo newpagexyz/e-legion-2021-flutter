@@ -7,8 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginPageState {
-  final loginController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController loginController;
+  final TextEditingController passwordController;
+  bool isPasswordHidden;
+
+  LoginPageState(
+      {required this.loginController,
+      required this.passwordController,
+      required this.isPasswordHidden});
+
+  LoginPageState.initial()
+      : loginController = TextEditingController(),
+        passwordController = TextEditingController(),
+        isPasswordHidden = true;
 
   void dispose() {
     loginController.dispose();
@@ -16,17 +27,30 @@ class LoginPageState {
   }
 }
 
-final loginPageInputProvider = Provider.autoDispose((ref) {
-  final state = LoginPageState();
+class LoginPageChangeNotifier extends ValueNotifier<LoginPageState> {
+  LoginPageChangeNotifier() : super(LoginPageState.initial());
 
-  ref.onDispose(() => state.dispose());
-  return state;
-});
+  void togglePasswordHidden() {
+    value.isPasswordHidden = !value.isPasswordHidden;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    value.dispose();
+    super.dispose();
+  }
+}
+
+final loginPageInputProvider =
+    ChangeNotifierProvider.autoDispose((ref) => LoginPageChangeNotifier());
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
 
-  InputDecoration _decoration(String caption) {
+  InputDecoration _decoration(
+    String caption,
+  ) {
     return InputDecoration(
       filled: true,
       hintText: caption,
@@ -41,7 +65,7 @@ class LoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _controllers = ref.watch(loginPageInputProvider);
+    final _controllers = ref.watch(loginPageInputProvider).value;
     final _authNotifier = ref.watch(authStateNotifierProvider.notifier);
     final width = MediaQuery.of(context).size.width;
 
@@ -58,70 +82,98 @@ class LoginPage extends ConsumerWidget {
     });
 
     return SafeArea(
-      child: Stack(
-        children: [
-          const Positioned.fill(
-              child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: Image(image: AssetImage('images/background.png')))),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Row(
-                    children: const [
-                      Spacer(),
-                      Expanded(
-                        flex: 3,
-                        child: Image(
-                          image: AssetImage('images/logo60.png'),
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Stack(
+          children: [
+            const Positioned.fill(
+                child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: Image(image: AssetImage('images/background.png')))),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Row(
+                      children: const [
+                        Spacer(),
+                        Expanded(
+                          flex: 3,
+                          child: Image(
+                            image: AssetImage('images/logo60.png'),
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                    ],
+                        Spacer(),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: width * 0.65,
-                  child: TextField(
-                      controller: _controllers.loginController,
-                      decoration: _decoration('Логин')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: SizedBox(
+                  SizedBox(
                     width: width * 0.65,
                     child: TextField(
-                      controller: _controllers.passwordController,
-                      decoration: _decoration('Пароль'),
+                        controller: _controllers.loginController,
+                        decoration: _decoration('Логин')),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          width: width * 0.65,
+                          child: TextField(
+                            controller: _controllers.passwordController,
+                            enableSuggestions: false,
+                            obscureText: _controllers.isPasswordHidden,
+                            decoration: _decoration(
+                              'Пароль',
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                            child: IconButton(
+                              icon: (_controllers.isPasswordHidden)
+                                  ? const ImageIcon(
+                                      AssetImage('images/pass_visiable.png'))
+                                  : const ImageIcon(
+                                      AssetImage('images/pass_unvisiable.png')),
+                              onPressed: () {
+                                ref
+                                    .read(loginPageInputProvider)
+                                    .togglePasswordHidden();
+                              },
+                            ),
+                            right: 0),
+                      ],
                     ),
                   ),
-                ),
-                Row(
-                  children: [
-                    const Spacer(flex: 2),
-                    Expanded(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: LoginPageAuthButton(
-                          loginCallback: () {
-                            _authNotifier.login(
-                                creds: LoginPassword(
-                                    email: _controllers.loginController.text,
-                                    password:
-                                        _controllers.passwordController.text));
-                          },
+                  Row(
+                    children: [
+                      const Spacer(flex: 2),
+                      Expanded(
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: LoginPageAuthButton(
+                            loginCallback: () {
+                              _authNotifier.login(
+                                  creds: LoginPassword(
+                                      email: _controllers.loginController.text,
+                                      password: _controllers
+                                          .passwordController.text));
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
