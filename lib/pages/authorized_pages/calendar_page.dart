@@ -59,12 +59,7 @@ class CalendarPage extends StatelessWidget {
                     headerVisible: false,
                     rowHeight: 48,
                     holidayPredicate: (day) {
-                      return false;
-                      // return (day.weekday == DateTime.sunday ||
-                      //     state.events.events
-                      //         .where((event) =>
-                      //             event.date == day.toString().substring(0, 10))
-                      //         .isEmpty);
+                      return (day.weekday == DateTime.sunday);
                     },
                     calendarBuilders: CalendarBuilders(
                       holidayBuilder: (context, day, focusedDay) {
@@ -117,36 +112,6 @@ class CalendarPage extends StatelessWidget {
                               ),
                             ),
                           ],
-                        );
-                      },
-                      dowBuilder: (context, day) {
-                        var a = '';
-                        switch (day.weekday) {
-                          case 1:
-                            a = 'пн';
-                            break;
-                          case 2:
-                            a = 'вт';
-                            break;
-                          case 3:
-                            a = 'ср';
-                            break;
-                          case 4:
-                            a = 'чт';
-                            break;
-                          case 5:
-                            a = 'пт';
-                            break;
-                          case 6:
-                            a = 'сб';
-                            break;
-                          case 0:
-                            a = 'вс';
-                        }
-                        return Center(
-                          child: Text(a,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
                         );
                       },
                       markerBuilder: (context, day, events) {

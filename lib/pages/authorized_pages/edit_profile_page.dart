@@ -1,3 +1,4 @@
+import 'package:elegionhack/colors.dart';
 import 'package:elegionhack/edit_profile/edit_profile_provider.dart';
 import 'package:elegionhack/pages/authorized_pages/widgets/button_with_arrow.dart';
 import 'package:flutter/material.dart';
@@ -138,14 +139,20 @@ class EditProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
+    return CustomScrollView(
       slivers: [
-        SliverAppBar(
+        const SliverAppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: ELegionColors.eLegionLightBlue,
           pinned: true,
-          title: Text('Изменение профиля'),
+          title:
+              Text('Изменение профиля', style: TextStyle(color: Colors.black)),
         ),
         SliverToBoxAdapter(
-          child: EditProfilePageContent(),
+          child: Container(
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.grey.shade300))),
+              child: const EditProfilePageContent()),
         )
       ],
     );

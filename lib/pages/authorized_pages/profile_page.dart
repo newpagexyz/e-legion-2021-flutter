@@ -1,4 +1,5 @@
 import 'package:elegionhack/app.dart';
+import 'package:elegionhack/colors.dart';
 import 'package:elegionhack/pages/authorized.dart';
 import 'package:elegionhack/pages/authorized_pages/edit_profile_page.dart';
 import 'package:elegionhack/profile/profile_provider.dart';
@@ -143,11 +144,15 @@ class ProfilePage extends ConsumerWidget {
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text(userProfileState.map(
-                data: (profile) =>
-                    '${profile.value.name} ${profile.value.patronymic} ${profile.value.surname}',
-                loading: (_) => '',
-                error: (_) => 'Error')),
+            backgroundColor: Colors.white,
+            foregroundColor: ELegionColors.eLegionLightBlue,
+            title: Text(
+                userProfileState.map(
+                    data: (profile) =>
+                        '${profile.value.name} ${profile.value.patronymic} ${profile.value.surname}',
+                    loading: (_) => '',
+                    error: (_) => 'Error'),
+                style: const TextStyle(color: Colors.black)),
             pinned: true,
             actions: [
               IconButton(
@@ -159,7 +164,11 @@ class ProfilePage extends ConsumerWidget {
             ],
           ),
           SliverToBoxAdapter(
-            child: content,
+            child: Container(
+              child: content,
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.grey.shade300))),
+            ),
           )
         ],
       ),

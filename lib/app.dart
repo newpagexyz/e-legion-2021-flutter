@@ -1,4 +1,5 @@
 import 'package:elegionhack/auth/auth_provider.dart';
+import 'package:elegionhack/colors.dart';
 import 'package:elegionhack/pages/authorized_pages/profile_page.dart';
 import 'package:elegionhack/pages/login.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class App extends ConsumerWidget {
 
     return MaterialApp(
       navigatorKey: _navigatorKey,
+      theme: ThemeData(primaryColor: ELegionColors.eLegionLightBlue),
       supportedLocales: const [Locale('en', '')],
       home: const SplashScreen(),
     );

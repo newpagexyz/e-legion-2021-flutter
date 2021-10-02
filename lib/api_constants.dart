@@ -9,3 +9,14 @@ class UserApi {
   static const changeAvatar =
       'https://e-legion.newpage.xyz/api/v1/change_avatar/';
 }
+
+class TeamsApi {
+  static const fetchTeamsList =
+      'https://e-legion.newpage.xyz/api/v1/get_member_teams/';
+  static const fetchTeamMembers =
+      'https://e-legion.newpage.xyz/api/v1/get_team_members/';
+  static const searchUsers = 'https://e-legion.newpage.xyz/api/v1/search_user/';
+  static const createTeam = 'https://e-legion.newpage.xyz/api/v1/create_team/';
+  static const addTeamMember =
+      'https://e-legion.newpage.xyz/api/v1/add_team_member/';
+}
