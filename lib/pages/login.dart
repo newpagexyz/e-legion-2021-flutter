@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'authorized_widgets/button_with_arrow.dart';
+import 'authorized_pages/widgets/button_with_arrow.dart';
 
 class LoginPageState {
   final TextEditingController loginController;

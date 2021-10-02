@@ -1,5 +1,5 @@
 import 'package:elegionhack/edit_profile/edit_profile_provider.dart';
-import 'package:elegionhack/pages/authorized_widgets/button_with_arrow.dart';
+import 'package:elegionhack/pages/authorized_pages/widgets/button_with_arrow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -59,8 +59,8 @@ class EditProfileAvatarHeader extends ConsumerWidget {
                         )
                       : (data.value.fetchedAvatar != null)
                           ? CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(data.value.fetchedAvatar!))
+                              backgroundImage: NetworkImage(
+                                  'https://e-legion.newpage.xyz/files/avatar/${data.value.fetchedAvatar!}'))
                           : const CircleAvatar(
                               backgroundImage:
                                   AssetImage('images/logo60.png'))),
@@ -120,7 +120,9 @@ class EditProfilePageContent extends ConsumerWidget {
                     caption: 'Telegram',
                     controller: state.value.telegramController),
                 ButtonWithArrow(
-                  callback: () {},
+                  callback: () {
+                    ref.read(editProfileProvider).save();
+                  },
                   caption: 'Сохранить',
                   horizontal: true,
                 )

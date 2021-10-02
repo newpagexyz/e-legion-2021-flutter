@@ -1,5 +1,9 @@
 import 'package:elegionhack/auth/auth_provider.dart';
 import 'package:elegionhack/colors.dart';
+import 'package:elegionhack/pages/authorized.dart';
+import 'package:elegionhack/pages/authorized_pages/calendar_page.dart';
+import 'package:elegionhack/pages/authorized_pages/notifications_page.dart';
+import 'package:elegionhack/pages/authorized_pages/teams_page.dart';
 import 'package:elegionhack/profile/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,17 +49,54 @@ class MainDrawer extends Drawer {
           builder: (context, ref, child) {
             final userProfile = ref.watch(userProfileProvider(-1));
             return userProfile.map(
-                data: (value) => Text(
-                    '${value.value.name} ${value.value.surname} ${value.value.patronymic}'),
+                data: (value) => Flexible(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: CircleAvatar(
+                                maxRadius: 80,
+                                backgroundImage: NetworkImage(
+                                    'https://e-legion.newpage.xyz/files/avatar/${value.value.avatar}')),
+                          ),
+                          Text(
+                            '${value.value.name} ${value.value.patronymic}',
+                            style: const TextStyle(
+                                color: ELegionColors.eLegionLightBlue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(value.value.surname,
+                              style: const TextStyle(
+                                  color: ELegionColors.eLegionLightBlue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16))
+                        ],
+                      ),
+                    ),
                 loading: (_) => const Text(''),
                 error: (_) => const Text(''));
           },
         ),
         DrawerElement(callback: () {}, caption: 'Личный профиль'),
-        DrawerElement(callback: () {}, caption: 'Моя команда'),
+        DrawerElement(
+            callback: () {
+              Navigator.of(context)
+                  .push(AuthorizedPage.route(child: const TeamsPage()));
+            },
+            caption: 'Моя команда'),
         DrawerElement(callback: () {}, caption: 'Задачи'),
-        DrawerElement(callback: () {}, caption: 'Календарь'),
-        DrawerElement(callback: () {}, caption: 'Рабочие чаты'),
+        DrawerElement(
+            callback: () {
+              Navigator.of(context)
+                  .push(AuthorizedPage.route(child: const CalendarPage()));
+            },
+            caption: 'Календарь'),
+        DrawerElement(
+            callback: () {
+              Navigator.of(context).push(
+                  AuthorizedPage.route(child: const NotificationsScreen()));
+            },
+            caption: 'Рабочие чаты'),
         DrawerElement(callback: () {}, caption: 'Уведомления'),
         DrawerElement(callback: () {}, caption: 'Приветственная книга'),
         Padding(

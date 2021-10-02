@@ -15,10 +15,10 @@ class ProfileNotifier extends StateNotifier<AsyncValue<Profile>> {
   int idx;
 
   void reload() async {
-    _init(idx);
+    await _init(idx);
   }
 
-  void _init(int idx) async {
+  Future<void> _init(int idx) async {
     final client = ref.read(httpClientRepository);
     final credentials = ref.watch(authStateNotifierProvider);
     if (credentials.credentials != null) {

@@ -1,4 +1,4 @@
-import 'package:elegionhack/pages/authorized_widgets/main_drawer.dart';
+import 'package:elegionhack/pages/authorized_pages/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 
 class AuthorizedPage extends StatelessWidget {

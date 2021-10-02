@@ -38,6 +38,7 @@ class Profile {
   final String? addPhone;
 
   final ProfileStatus role;
+  final String? post;
   final String? department;
 
   final String? dateOfEmployement;
@@ -57,6 +58,7 @@ class Profile {
       required this.patronymic,
       required this.email,
       this.status = EmployeeStatus.initial,
+      this.post,
       required this.role,
       required this.gender,
       this.avatar,
@@ -75,6 +77,7 @@ class Profile {
       this.status = EmployeeStatus.initial,
       this.phone,
       this.addPhone,
+      this.post,
       this.department,
       this.dateOfEmployement,
       this.firstDayOnWork,
@@ -117,6 +120,7 @@ class Profile {
         id: int.parse(json['id']),
         email: json['email'] ?? '',
         name: json['name'],
+        post: json['post'],
         surname: json['surname'] ?? '',
         patronymic: json['patronymic'] ?? '',
         phone: json['phone'],
