@@ -1,20 +1,28 @@
 enum ProfileStatus { legioner, teamlead, admin }
 enum EmployeeStatus { initial, ill, vacation, remote, office }
 enum Gender { male, female }
-enum ContactType {
-  telegram,
-  skype,
-  slack,
-}
-
-class Contact {
-  ContactType type;
-  String contact;
-
-  Contact({required this.type, required this.contact});
-}
 
 class Profile {
+  String get profileStatusToString {
+    switch (role) {
+      case ProfileStatus.legioner:
+        return 'Легионер';
+      case ProfileStatus.teamlead:
+        return 'Тимлид';
+      case ProfileStatus.admin:
+        return 'А';
+    }
+  }
+
+  String get genderString {
+    switch (gender) {
+      case Gender.male:
+        return 'Мужской';
+      case Gender.female:
+        return 'Женский';
+    }
+  }
+
   final int id;
 
   final String name;
@@ -38,7 +46,9 @@ class Profile {
   final Gender gender;
   final String? birthdate;
 
-  final List<Contact>? contacts;
+  final String? skype;
+  final String? telegram;
+  final String? cv;
 
   Profile(
       {required this.id,
@@ -56,7 +66,9 @@ class Profile {
       this.department,
       this.firstDayOnWork,
       this.birthdate,
-      this.contacts});
+      this.skype,
+      this.cv,
+      this.telegram});
 
   Profile.empty(this.id,
       {this.avatar,
@@ -67,7 +79,9 @@ class Profile {
       this.dateOfEmployement,
       this.firstDayOnWork,
       this.birthdate,
-      this.contacts})
+      this.cv,
+      this.skype,
+      this.telegram})
       : name = '',
         surname = '',
         patronymic = '',
@@ -75,7 +89,13 @@ class Profile {
         role = ProfileStatus.legioner,
         gender = Gender.male;
 
-  Profile copyWith({String? avatar, String? phone, String? birthdate}) {
+  Profile copyWith(
+      {String? avatar,
+      String? phone,
+      String? birthdate,
+      String? skype,
+      String? telegram,
+      String? cv}) {
     return Profile(
         name: name,
         surname: surname,
@@ -85,7 +105,30 @@ class Profile {
         patronymic: patronymic,
         phone: phone ?? this.phone,
         avatar: avatar ?? this.avatar,
+        cv: cv ?? this.cv,
         birthdate: birthdate ?? this.birthdate,
+        skype: skype ?? this.skype,
+        telegram: telegram ?? this.telegram,
         role: role);
+  }
+
+  factory Profile.fromJson(Map<String, dynamic> json) {
+    return Profile(
+        id: int.parse(json['id']),
+        email: json['email'] ?? '',
+        name: json['name'],
+        surname: json['surname'] ?? '',
+        patronymic: json['patronymic'] ?? '',
+        phone: json['phone'],
+        department: json['sub_company'] ?? '',
+        telegram: json['telegram'],
+        skype: json['skype'],
+        dateOfEmployement: json['work_start'],
+        firstDayOnWork: json['work_start_here'],
+        avatar: json['avatar'],
+        cv: json['cv'],
+        addPhone: json['emerge_phone'],
+        gender: Gender.values[int.tryParse(json['sex'] ?? '0') ?? 0],
+        role: ProfileStatus.values[int.tryParse(json['post'] ?? '0') ?? 0]);
   }
 }

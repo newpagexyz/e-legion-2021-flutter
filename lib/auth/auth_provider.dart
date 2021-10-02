@@ -38,12 +38,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final _store = const FlutterSecureStorage();
 
   void _init() async {
-    final _session = await _store.read(key: 'session');
+    final _id = await _store.read(key: 'id');
     final _token = await _store.read(key: 'token');
 
-    if (_session != null && _token != null) {
-      state = AuthState.auth(
-          credentials: Credentials(session: _session, token: _token));
+    if (_id != null && _token != null) {
+      state = AuthState.auth(credentials: Credentials(id: _id, token: _token));
     } else {
       state = AuthState.unauth();
     }
@@ -63,13 +62,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     try {
       final response = await client.post(Uri.parse(LoginApi.login),
           body: {'email': creds.email, 'password': creds.password});
-      if (response.statusCode == 200 && response.body.toString() != 'false') {
-        final credentials =
-            Credentials.fromJson(jsonDecode(response.body.toString()));
-        state = AuthState.auth(credentials: credentials);
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body.toString());
+        if (json['body'] != false) {
+          final credentials = Credentials.fromJson(json['body']);
+          state = AuthState.auth(credentials: credentials);
 
-        await _store.write(key: 'session', value: credentials.session);
-        await _store.write(key: 'token', value: credentials.token);
+          await _store.write(key: 'id', value: credentials.id);
+          await _store.write(key: 'token', value: credentials.token);
+        } else {
+          state = AuthState.initial(error: 'Could not authorized');
+        }
       } else {
         state = AuthState.initial(error: 'Could not authorized');
       }

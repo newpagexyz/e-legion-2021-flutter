@@ -6,11 +6,11 @@ class LoginPassword {
 }
 
 class Credentials {
-  final String session;
+  final String id;
   final String token;
 
-  Credentials({required this.session, required this.token});
+  Credentials({required this.id, required this.token});
   factory Credentials.fromJson(Map<String, dynamic> json) {
-    return Credentials(session: json['session'], token: json['token']);
+    return Credentials(id: json['id'], token: json['token']);
   }
 }

@@ -15,8 +15,16 @@ class ProfilePageElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const style = TextStyle(fontWeight: FontWeight.bold);
     return Row(
-      children: [Text(caption), Text(value)],
+      children: [
+        Expanded(child: Text(caption, style: style)),
+        Expanded(
+            child: Text(
+          value,
+          style: style,
+        ))
+      ],
     );
   }
 }
@@ -37,7 +45,50 @@ class ProfilePage extends ConsumerWidget {
         data: (profile) {
           return Column(
             children: [
-              ProfilePageElement(caption: 'Имя', value: profile.value.name)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                child: Stack(
+                  children: const [
+                    Image(
+                        width: double.infinity,
+                        image: AssetImage('images/pass_unvisiable.png')),
+                    Positioned(
+                        child: Text(
+                          'Личный кабинет',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
+                        ),
+                        bottom: 20,
+                        left: 20),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: [
+                    ProfilePageElement(
+                        caption: 'E-Mail', value: profile.value.email),
+                    if (profile.value.phone != null)
+                      ProfilePageElement(
+                          caption: 'Телефон', value: profile.value.phone!),
+                    if (profile.value.addPhone != null)
+                      ProfilePageElement(
+                          caption: 'Тел.д/экстр. связи',
+                          value: profile.value.addPhone ?? ''),
+                    ProfilePageElement(
+                        caption: 'Роль',
+                        value: profile.value.profileStatusToString),
+                    if (profile.value.department != null)
+                      ProfilePageElement(
+                          caption: 'Подразделение',
+                          value: profile.value.department!),
+                    ProfilePageElement(
+                        caption: 'Пол', value: profile.value.genderString)
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -51,7 +102,8 @@ class ProfilePage extends ConsumerWidget {
       slivers: [
         SliverAppBar(
           title: Text(userProfileState.map(
-              data: (profile) => profile.value.name,
+              data: (profile) =>
+                  '${profile.value.name} ${profile.value.patronymic} ${profile.value.surname}',
               loading: (_) => '',
               error: (_) => 'Error')),
           pinned: true,

@@ -1,7 +1,7 @@
 class LoginApi {
-  static const login = 'https://tm.newpage.xyz/api/auth/';
+  static const login = 'https://e-legion.newpage.xyz/api/v1/auth/';
 }
 
 class UserApi {
-  static const fetchUser = 'https://tm.newpage.xyz/api/user_info/';
+  static const fetchUser = 'https://e-legion.newpage.xyz/api/v1/user_info/';
 }

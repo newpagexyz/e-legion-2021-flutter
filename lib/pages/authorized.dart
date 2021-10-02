@@ -8,7 +8,7 @@ class AuthorizedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(drawer: MainDrawer(), body: child));
+    return SafeArea(child: Scaffold(drawer: const MainDrawer(), body: child));
   }
 
   static Route route({required Widget child}) {
