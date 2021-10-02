@@ -1,4 +1,8 @@
-enum ProfileStatus { legioner, teamlead, admin }
+enum ProfileStatus {
+  admin,
+  teamlead,
+  legioner,
+}
 enum EmployeeStatus { initial, ill, vacation, remote, office }
 enum Gender { male, female }
 
@@ -10,7 +14,7 @@ class Profile {
       case ProfileStatus.teamlead:
         return 'Тимлид';
       case ProfileStatus.admin:
-        return 'А';
+        return 'Руководитель';
     }
   }
 
@@ -133,6 +137,6 @@ class Profile {
         cv: json['cv'],
         addPhone: json['emerge_phone'],
         gender: Gender.values[int.tryParse(json['sex'] ?? '0') ?? 0],
-        role: ProfileStatus.values[int.tryParse(json['post'] ?? '0') ?? 0]);
+        role: ProfileStatus.values[int.tryParse(json['role'] ?? '0') ?? 0]);
   }
 }

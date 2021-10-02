@@ -29,10 +29,26 @@ class Team {
 
 class TeamsList {
   final List<Team> teams;
-  TeamsList(this.teams, this.selectedTeam);
+  TeamsList(this.teams, this.selectedTeam, this.open, this.feedbackUserID);
   final int selectedTeam;
+  final bool open;
+  final int feedbackUserID;
+  TeamsList toggle() {
+    return TeamsList(teams, selectedTeam, !open, feedbackUserID);
+  }
+
+  TeamsList selectTeam(int id) {
+    return TeamsList(teams, id, open, feedbackUserID);
+  }
+
+  TeamsList openFeedback(int id) {
+    return TeamsList(teams, selectedTeam, open, id);
+  }
+
   TeamsList.empty()
       : teams = const [],
+        feedbackUserID = -1,
+        open = false,
         selectedTeam = 0;
 }
 
@@ -42,6 +58,18 @@ class TeamsListStateNotifier extends StateNotifier<AsyncValue<TeamsList>> {
   }
 
   final ProviderRefBase ref;
+
+  void toggle() {
+    state.whenData((value) => state = AsyncData(value.toggle()));
+  }
+
+  void selectTeam(int id) {
+    state.whenData((value) => state = AsyncData(value.selectTeam(id)));
+  }
+
+  void openFeedback(int id) {
+    state.whenData((value) => state = AsyncData(value.openFeedback(id)));
+  }
 
   void load() async {
     final client = ref.watch(httpClientRepository);
@@ -56,7 +84,7 @@ class TeamsListStateNotifier extends StateNotifier<AsyncValue<TeamsList>> {
           teamsList.add(Team.fromJson(team));
         }
 
-        state = AsyncData(TeamsList(teamsList, 0));
+        state = AsyncData(TeamsList(teamsList, 0, false, -1));
       } else {
         state = AsyncError('Could not fetch data');
       }
@@ -148,13 +176,17 @@ class CreateTeamNotifier extends ValueNotifier<CreateTeamState> {
 
     final newTeamId = createResponseJson['body'];
 
+    final results = <dynamic>[];
+
     for (var user in value.selected) {
-      await client.post(Uri.parse(TeamsApi.addTeamMember), body: {
+      results.add(await client.post(Uri.parse(TeamsApi.addTeamMember), body: {
         'token': creds.credentials!.token,
         'tid': newTeamId.toString(),
-        'uid': user.toString()
-      });
+        'mid': user.toString()
+      }));
     }
+
+    ref.read(teamsListProvider.notifier).load();
   }
 
   void load({String query = ''}) async {
@@ -188,5 +220,6 @@ class CreateTeamNotifier extends ValueNotifier<CreateTeamState> {
   }
 }
 
-final createTeamProvider = ChangeNotifierProvider<CreateTeamNotifier>(
-    (ref) => CreateTeamNotifier(ref));
+final createTeamProvider =
+    ChangeNotifierProvider.autoDispose<CreateTeamNotifier>(
+        (ref) => CreateTeamNotifier(ref));

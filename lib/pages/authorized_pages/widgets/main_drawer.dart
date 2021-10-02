@@ -1,6 +1,8 @@
+import 'package:elegionhack/api_constants.dart';
 import 'package:elegionhack/auth/auth_provider.dart';
 import 'package:elegionhack/colors.dart';
 import 'package:elegionhack/pages/authorized.dart';
+import 'package:elegionhack/pages/authorized_pages/booklet.dart';
 import 'package:elegionhack/pages/authorized_pages/calendar_page.dart';
 import 'package:elegionhack/pages/authorized_pages/notifications_page.dart';
 import 'package:elegionhack/pages/authorized_pages/teams_page.dart';
@@ -56,7 +58,7 @@ class MainDrawer extends Drawer {
                             child: CircleAvatar(
                                 maxRadius: 80,
                                 backgroundImage: NetworkImage(
-                                    'https://e-legion.newpage.xyz/files/avatar/${value.value.avatar}')),
+                                    '${UserApi.userAvatar}${value.value.avatar}')),
                           ),
                           Text(
                             '${value.value.name} ${value.value.patronymic}',
@@ -98,7 +100,12 @@ class MainDrawer extends Drawer {
             },
             caption: 'Рабочие чаты'),
         DrawerElement(callback: () {}, caption: 'Уведомления'),
-        DrawerElement(callback: () {}, caption: 'Приветственная книга'),
+        DrawerElement(
+            callback: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Booklet()));
+            },
+            caption: 'Приветственная книга'),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(

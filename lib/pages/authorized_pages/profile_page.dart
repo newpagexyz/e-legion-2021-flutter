@@ -1,3 +1,4 @@
+import 'package:elegionhack/api_constants.dart';
 import 'package:elegionhack/app.dart';
 import 'package:elegionhack/colors.dart';
 import 'package:elegionhack/pages/authorized.dart';
@@ -62,7 +63,7 @@ class ProfilePage extends ConsumerWidget {
                         : Image(
                             width: double.infinity,
                             image: NetworkImage(
-                                'https://e-legion.newpage.xyz/files/avatar/${profile.value.avatar}')),
+                                '${UserApi.userAvatar}${profile.value.avatar}')),
                     const Positioned(
                         child: Text(
                           ' Личный\nкабинет',

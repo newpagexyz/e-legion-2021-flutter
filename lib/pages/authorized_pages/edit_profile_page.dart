@@ -1,3 +1,4 @@
+import 'package:elegionhack/api_constants.dart';
 import 'package:elegionhack/colors.dart';
 import 'package:elegionhack/edit_profile/edit_profile_provider.dart';
 import 'package:elegionhack/pages/authorized_pages/widgets/button_with_arrow.dart';
@@ -61,7 +62,7 @@ class EditProfileAvatarHeader extends ConsumerWidget {
                       : (data.value.fetchedAvatar != null)
                           ? CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  'https://e-legion.newpage.xyz/files/avatar/${data.value.fetchedAvatar!}'))
+                                  '${UserApi.userAvatar}${data.value.fetchedAvatar!}'))
                           : const CircleAvatar(
                               backgroundImage:
                                   AssetImage('images/logo60.png'))),
