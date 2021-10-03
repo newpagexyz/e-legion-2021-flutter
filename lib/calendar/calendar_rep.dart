@@ -94,8 +94,8 @@ class CalendarNotifier extends ValueNotifier<CalendarState> {
       'token': creds.credentials!.token,
       'description': value.description.text,
       'name': value.caption.text,
-      'start_time': '${value.dateStart} ${value.timeStart}',
-      'end_time': '${value.dateFinish} ${value.timeFinish}',
+      'start_time': '${value.dateStart.text} ${value.timeStart.text}',
+      'end_time': '${value.dateFinish.text} ${value.timeFinish.text}',
       'place': 'here',
       'type': '1'
     });
@@ -105,6 +105,9 @@ class CalendarNotifier extends ValueNotifier<CalendarState> {
     value.timeFinish.clear();
     value.timeStart.clear();
     value.description.clear();
+
+    toggle();
+    load();
   }
 
   void setMonth(DateTime month) {

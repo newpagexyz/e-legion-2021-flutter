@@ -111,10 +111,13 @@ class _CreateEventScreen extends State<CreateEventScreen>
                                         lastDate: DateTime(2100));
                                     if (picked != null) {
                                       ref
-                                          .read(calendarRepository)
-                                          .value
-                                          .dateStart
-                                          .text = picked.toString();
+                                              .read(calendarRepository)
+                                              .value
+                                              .dateStart
+                                              .text =
+                                          picked
+                                              .toIso8601String()
+                                              .substring(0, 10);
                                     }
                                   },
                                   controller: state.dateStart,
@@ -134,11 +137,10 @@ class _CreateEventScreen extends State<CreateEventScreen>
                                         initialTime: TimeOfDay.now());
                                     if (picked != null) {
                                       ref
-                                              .read(calendarRepository)
-                                              .value
-                                              .timeStart
-                                              .text =
-                                          '${picked.hour}:${picked.minute}';
+                                          .read(calendarRepository)
+                                          .value
+                                          .timeStart
+                                          .text = picked.format(context);
                                     }
                                   },
                                   controller: state.timeStart,
@@ -160,10 +162,13 @@ class _CreateEventScreen extends State<CreateEventScreen>
                                         lastDate: DateTime(2100));
                                     if (picked != null) {
                                       ref
-                                          .read(calendarRepository)
-                                          .value
-                                          .dateFinish
-                                          .text = picked.toString();
+                                              .read(calendarRepository)
+                                              .value
+                                              .dateFinish
+                                              .text =
+                                          picked
+                                              .toIso8601String()
+                                              .substring(0, 10);
                                     }
                                   },
                                   controller: state.dateFinish,
@@ -183,11 +188,11 @@ class _CreateEventScreen extends State<CreateEventScreen>
                                         initialTime: TimeOfDay.now());
                                     if (picked != null) {
                                       ref
-                                              .read(calendarRepository)
-                                              .value
-                                              .timeFinish
-                                              .text =
-                                          '${picked.hour}:${picked.minute}';
+                                          .read(calendarRepository)
+                                          .value
+                                          .timeFinish
+                                          .text = picked.format(context);
+                                      //'${picked.hour}:${picked.minute}';
                                     }
                                   },
                                   controller: state.timeFinish,
